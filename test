@@ -1,0 +1,79 @@
+from Classes import Sudoku
+import copy
+import numpy as np
+
+matrix = [[5, 3, 0, 0, 7, 0, 0, 0, 0],
+          [6, 0, 0, 1, 9, 5, 0, 0, 0],
+          [0, 9, 8, 0, 0, 0, 0, 6, 0],
+          [8, 0, 0, 0, 6, 0, 0, 0, 3],
+          [4, 0, 0, 8, 0, 3, 0, 0, 1],
+          [7, 0, 0, 0, 2, 0, 0, 0, 6],
+          [0, 6, 0, 0, 0, 0, 2, 8, 0],
+          [0, 0, 0, 4, 1, 9, 0, 0, 5],
+          [0, 0, 0, 0, 8, 0, 0, 7, 9]]
+
+posibles_sudokus = Sudoku(matrix)
+posibles_sudokus.print_matrix() #imprime la matriz inicial
+
+
+
+def get_sudokus(Sudoku): #genera todos los estados válidos posibles a partir de un estado dado
+    temp_sudoku = Sudoku
+    posibles_sudokus = []
+    k = 1
+    for i in range(9):
+        for j in range(9):
+            if temp_sudoku.matrix[i][j] == 0:
+                while k < 10:
+                    temp_sudoku.matrix[i][j] = k
+                    if temp_sudoku.is_valid():
+                        aux = copy.deepcopy(temp_sudoku)
+                        posibles_sudokus.append(aux)
+
+                    k += 1
+
+    return posibles_sudokus
+
+
+posibles_sudokus = get_sudokus(posibles_sudokus) #se llama a la funcion a partir del sudoku inicial
+
+for k in range (50):  #"hardcodeado" a 50 porque había 50 espacios vacios y mi cerebro no funcionaba
+    posibles_sudokus_aux_2 = []
+    for i in range(len(posibles_sudokus)):
+        posibles_sudokus_aux = get_sudokus(posibles_sudokus[i])
+        for j in range(len(posibles_sudokus_aux)):
+       # posibles_sudokus_aux[j].print_matrix()
+          posibles_sudokus_aux_2.append(copy.deepcopy(posibles_sudokus_aux[j]))
+
+    print(len(posibles_sudokus_aux_2))  #para ver cuantos posibles caminos hay en cada paso del grafo
+    posibles_sudokus = posibles_sudokus_aux_2
+    k+=1
+
+for i in posibles_sudokus:
+    i.print_matrix()
+
+if (i.is_valid() and i.is_final_state()):  #se verifica que el sudoku final sea valido y este completo
+    print("Sudoku hecho")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ #   posibles_sudokus_aux = get_sudokus(sudoku)
+
+
+#for i in posibles_sudokus:
+ #   posibles_sudokus.print_matrix()
+
+
+
